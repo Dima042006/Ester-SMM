@@ -1,0 +1,172 @@
+
+<style>
+  .cp-wrap { padding: 1rem 0; font-family: var(--font-sans); }
+  .cp-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .cp-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .badge-sales { background: #EEEDFE; color: #3C3489; }
+  .badge-trust { background: #E1F5EE; color: #085041; }
+  .badge-reach { background: #FAECE7; color: #712B13; }
+  .cp-grid { display: flex; flex-direction: column; gap: 10px; }
+  .cp-day { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; cursor: pointer; }
+  .cp-day-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+  .cp-day-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+  .cp-day-title { flex: 1; }
+  .cp-day-name { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 2px; }
+  .cp-day-theme { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+  .cp-day-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cp-chevron { font-size: 12px; color: var(--color-text-secondary); transition: transform 0.2s; }
+  .cp-chevron.open { transform: rotate(180deg); }
+  .cp-day-body { display: none; padding: 0 16px 16px; border-top: 0.5px solid var(--color-border-tertiary); }
+  .cp-day-body.open { display: block; }
+  .cp-row { display: grid; grid-template-columns: 90px 1fr; gap: 8px; margin-top: 10px; align-items: start; }
+  .cp-label { font-size: 12px; color: var(--color-text-secondary); padding-top: 2px; }
+  .cp-value { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; }
+  .cp-format-pill { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+  .cp-cta { font-size: 12px; color: #185FA5; background: #E6F1FB; padding: 6px 10px; border-radius: var(--border-radius-md); margin-top: 8px; }
+  .goal-bar { display: flex; gap: 20px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 16px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .goal-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+  .goal-dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+<div class="cp-wrap">
+  <h2 class="sr-only">Контент-план для Instagram: кератин, ботокс, холодне відновлення — 7 днів</h2>
+  <div class="goal-bar">
+    <div class="goal-item"><div class="goal-dot" style="background:#534AB7"></div>Продажі</div>
+    <div class="goal-item"><div class="goal-dot" style="background:#0F6E56"></div>Довіра</div>
+    <div class="goal-item"><div class="goal-dot" style="background:#993C1D"></div>Охоплення</div>
+    <div class="goal-item" style="margin-left:auto; font-size:11px;">Аудиторія: 16–35 років · Ніша: кератин / ботокс / холодне відновлення</div>
+  </div>
+
+  <div class="cp-grid" id="days"></div>
+</div>
+
+<script>
+const days = [
+  {
+    day: 1,
+    weekday: "Понеділок",
+    theme: "Проблема — гачок",
+    color: "#EEEDFE",
+    textColor: "#3C3489",
+    goals: ["reach","trust"],
+    format: "Reels",
+    content: "«Чому твоє волосся не слухається навіть після дорогого шампуню?» — 15-сек відео з трансформацією. До/після без слів, тільки музика і субтитри.",
+    caption: "Покажи 3 знаки пошкодженого волосся + один рядок про процедуру. Без продажу.",
+    hooks: "«Порівняй своє волосся з цим»",
+    cta: "CTA: «Збережи, щоб показати майстру»"
+  },
+  {
+    day: 2,
+    weekday: "Вівторок",
+    theme: "Освіта — чим відрізняються процедури",
+    color: "#E1F5EE",
+    textColor: "#085041",
+    goals: ["trust"],
+    format: "Карусель (5–7 слайдів)",
+    content: "Слайд 1: «Кератин vs Ботокс vs Холодне відновлення — що підходить саме тобі?». Порівняльна таблиця з простими словами. Слайд останній: твій контакт.",
+    caption: "Коротко і без жаргону. Стиль — подружній, не науковий.",
+    hooks: "«Свайпай → знайди свій тип»",
+    cta: "CTA: «Напиши нам свій тип волосся — підберемо процедуру»"
+  },
+  {
+    day: 3,
+    weekday: "Середа",
+    theme: "Соціальний доказ — відгук клієнта",
+    color: "#EEEDFE",
+    textColor: "#3C3489",
+    goals: ["trust","sales"],
+    format: "Stories (3–5 кадрів) + пост",
+    content: "Stories: фото до/після + скріншот відгуку + стікер-питання «А ти вже пробувала?». Пост: повний відгук + емоційний коментар від тебе як майстра.",
+    caption: "Акцент на емоцію клієнта, не на процедуру.",
+    hooks: "«Вона прийшла з цим, а пішла ось з цим»",
+    cta: "CTA: «Запишись за посиланням у профілі»"
+  },
+  {
+    day: 4,
+    weekday: "Четвер",
+    theme: "За лаштунками — процес",
+    color: "#FAECE7",
+    textColor: "#712B13",
+    goals: ["trust","reach"],
+    format: "Reels (15–30 сек)",
+    content: "Відео процесу нанесення (руки, волосся, текстура продукту). Естетика, ASMR-ефект, без балачок. Трендовий звук.",
+    caption: "Покажи деталі, які клієнт ніколи не бачить. Це викликає довіру і цікавість.",
+    hooks: "Відкрита текстура продукту в перших 2 секундах",
+    cta: "CTA: «Зберігай — і питай нас про ціну в директ»"
+  },
+  {
+    day: 5,
+    weekday: "П'ятниця",
+    theme: "Продаж в лоб — акція або пакет",
+    color: "#E6F1FB",
+    textColor: "#0C447C",
+    goals: ["sales"],
+    format: "Пост + Stories з таймером",
+    content: "Пост: «Тільки цього тижня — кератин + укладання в подарунок». Stories: таймер зворотного відліку + кнопка «Записатись».",
+    caption: "Одна чітка пропозиція. Ціна або «ціна від». Термін обмежений.",
+    hooks: "«Останні 2 місця на цей тиждень»",
+    cta: "CTA: «Пиши зараз — беремо запис у директ»"
+  },
+  {
+    day: 6,
+    weekday: "Субота",
+    theme: "Розваги + охоплення",
+    color: "#FAECE7",
+    textColor: "#712B13",
+    goals: ["reach"],
+    format: "Reels / Трендовий формат",
+    content: "«Типи волосся, які я бачу щодня» — гумористичний або впізнаваний формат. Категорії: «кучеряве непереможне», «пряме але страждає» тощо. Легко, без тиску.",
+    caption: "Більше гумору і впізнаваності — менше продажів. Мета: шер і збереження.",
+    hooks: "«Який ти тип? Відповідай у коментарях»",
+    cta: "CTA: «Відмічай подругу, якій це про неї»"
+  },
+  {
+    day: 7,
+    weekday: "Неділя",
+    theme: "Підсумок тижня + особисте",
+    color: "#E1F5EE",
+    textColor: "#085041",
+    goals: ["trust","reach"],
+    format: "Stories (6–8) або пост",
+    content: "Підсумок: скільки клієнтів прийняла, коротке відео «мій тиждень». Особиста деталь — чашка кави, музика в салоні, дрібниця. Завершення: тизер на наступний тиждень.",
+    caption: "Людяність і щирість = підписники стають клієнтами.",
+    hooks: "«Ось яким був мій тиждень»",
+    cta: "CTA: «Що хочеш побачити наступного тижня? Голосуй у Stories»"
+  }
+];
+
+const goalLabel = { sales: ["sales","Продажі"], trust: ["trust","Довіра"], reach: ["reach","Охоплення"] };
+const badgeClass = { sales: "badge-sales", trust: "badge-trust", reach: "badge-reach" };
+
+const container = document.getElementById("days");
+days.forEach((d, i) => {
+  const el = document.createElement("div");
+  el.className = "cp-day";
+  const tagHtml = d.goals.map(g => `<span class="cp-badge ${badgeClass[g]}">${goalLabel[g][1]}</span>`).join("");
+  el.innerHTML = `
+    <div class="cp-day-header" onclick="toggle(${i})">
+      <div class="cp-day-num" style="background:${d.color};color:${d.textColor}">${d.day}</div>
+      <div class="cp-day-title">
+        <p class="cp-day-name">${d.weekday}</p>
+        <p class="cp-day-theme">${d.theme}</p>
+      </div>
+      <div class="cp-day-tags">${tagHtml}</div>
+      <div class="cp-chevron" id="chev-${i}">▼</div>
+    </div>
+    <div class="cp-day-body" id="body-${i}">
+      <div class="cp-row"><span class="cp-label">Формат</span><span class="cp-value"><span class="cp-format-pill">${d.format}</span></span></div>
+      <div class="cp-row"><span class="cp-label">Контент</span><span class="cp-value">${d.content}</span></div>
+      <div class="cp-row"><span class="cp-label">Капшн</span><span class="cp-value">${d.caption}</span></div>
+      <div class="cp-row"><span class="cp-label">Гачок</span><span class="cp-value">${d.hooks}</span></div>
+      <div class="cp-cta">${d.cta}</div>
+    </div>
+  `;
+  container.appendChild(el);
+});
+
+function toggle(i) {
+  const body = document.getElementById("body-"+i);
+  const chev = document.getElementById("chev-"+i);
+  body.classList.toggle("open");
+  chev.classList.toggle("open");
+}
+</script>
